@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width,initial-scale=1.0">
+
+<title>SafeAlert</title>
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#070707;
+color:white;
+min-height:100vh;
+overflow-x:hidden;
+}
+
+.page{
+display:none;
+padding:20px;
+padding-bottom:110px;
+}
+
+.page.active{
+display:block;
+}
+
+.title{
+font-size:30px;
+font-weight:700;
+margin-bottom:8px;
+}
+
+.sub{
+color:#999;
+margin-bottom:18px;
+}
+
+.location{
+
+background:#111;
+
+padding:20px;
+
+border-radius:24px;
+
+text-align:center;
+
+color:#ff5d5d;
+
+line-height:1.8;
+
+margin-bottom:14px;
+
+}
+
+.primary-btn{
+
+width:100%;
+
+padding:16px;
+
+border:none;
+
+border-radius:18px;
+
+background:#1976ff;
+
+color:white;
+
+font-size:17px;
+
+margin-top:12px;
+
+}
+
+/* LIVE LOCATION */
+
+.live-box{
+
+display:flex;
+
+flex-direction:column;
+
+align-items:center;
+
+margin-top:22px;
+
+}
+
+.live-icon{
+
+width:90px;
+
+height:90px;
+
+border-radius:50%;
+
+background:#111;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+font-size:42px;
+
+}
+
+.live-title{
+
+margin-top:14px;
+
+font-size:18px;
+
+font-weight:bold;
+
+color:#1976ff;
+
+}
+
+.live-value{
+
+margin-top:14px;
+
+width:100%;
+
+padding:20px;
+
+background:#111;
+
+border-radius:24px;
+
+text-align:center;
+
+font-size:18px;
+
+}
+
+/* SOS */
+
+.sos-wrap{
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+margin-top:26px;
+
+}
+
+.sos-btn{
+
+width:250px;
+
+height:250px;
+
+border:none;
+
+border-radius:50%;
+
+background:#b00000;
+
+color:white;
+
+font-size:60px;
+
+box-shadow:
+
+0 0 40px red,
+
+0 0 100px rgba(255,0,0,.45);
+
+}
+
+/* STATS */
+
+.stats{
+
+display:flex;
+
+gap:14px;
+
+margin-top:22px;
+
+}
+
+.stat-card{
+
+flex:1;
+
+background:#111;
+
+padding:28px;
+
+border-radius:26px;
+
+text-align:center;
+
+}
+
+.stat-number{
+
+font-size:60px;
+
+}
+
+.stat-text{
+
+margin-top:10px;
+
+color:#888;
+
+}
+
+.card{
+background:#111;
+padding:18px;
+border-radius:22px;
+margin-top:16px;
+}
+
+input{
+width:100%;
+padding:15px;
+margin-top:12px;
+border:none;
+border-radius:14px;
+background:#1d1d1d;
+color:white;
+}
+
+.contact{
+background:#181818;
+padding:16px;
+margin-top:12px;
+border-radius:16px;
+}
+
+.profile-box{
+background:#111;
+padding:22px;
+border-radius:22px;
+margin-top:16px;
+}
+
+.history{
+background:#111;
+padding:16px;
+border-radius:16px;
+margin-top:12px;
+}
+
+.bottom{
+
+position:fixed;
+
+left:0;
+
+right:0;
+
+bottom:0;
+
+height:82px;
+
+background:#080808;
+
+display:flex;
+
+justify-content:space-around;
+
+align-items:center;
+
+border-top:1px solid #222;
+
+}
+
+.item{
+
+display:flex;
+
+flex-direction:column;
+
+align-items:center;
+
+gap:4px;
+
+font-size:12px;
+
+color:#777;
+
+}
+
+.item i{
+
+font-size:22px;
+
+}
+
+.selected{
+
+color:#1976ff;
+
+}
+
+</style>
+
+</head>
+
+<body>
+<div id="loginPage" style="display:flex;flex-direction:column;justify-content:center;align-items:center;height:100vh;background:#070707;padding:20px;">
+
+    <h1 style="color:#1976ff;font-size:38px;">SafeAlert</h1>
+
+    <p style="color:#999;margin:15px 0 30px;">
+        Your Emergency Safety Companion
+    </p>
+
+    <input
+        id="loginEmail"
+        type="email"
+        placeholder="Email"
+        style="width:100%;max-width:350px;padding:15px;margin-bottom:15px;border:none;border-radius:12px;background:#111;color:white;">
+
+<div style="position:relative;width:100%;max-width:350px;">
+
+    <input
+        id="loginPassword"
+        type="password"
+        placeholder="Password"
+        style="width:100%;padding-right:50px;">
+
+    <span
+        onclick="togglePassword()"
+        style="position:absolute;right:15px;top:50%;transform:translateY(-50%);cursor:pointer;">
+
+        <i id="eyeIcon" class="material-icons">visibility</i>
+
+    </span>
+
+</div>
+    <button
+        onclick="login()"
+        style="width:100%;max-width:350px;padding:15px;background:#1976ff;color:white;border:none;border-radius:12px;font-size:18px;margin-bottom:10px;">
+        Login
+    </button>
+
+    <button
+        onclick="signup()"
+        style="width:100%;max-width:350px;padding:15px;background:#00a651;color:white;border:none;border-radius:12px;font-size:18px;">
+        Create Account
+    </button>
+
+</div>
+
+<div id="app" style="display:none;">
+<!-- SOS -->
+
+<section
+id="sos"
+class="page active">
+
+<div class="title">
+
+SafeAlert
+
+</div>
+
+<div class="sub">
+
+Your emergency safety companion
+
+</div>
+
+<div
+id="location"
+class="location">
+
+Waiting for permission...
+
+</div>
+
+<button
+class="primary-btn"
+onclick="getLocation()">
+
+Refresh Location
+
+</button>
+
+<div class="live-box">
+
+<div class="live-icon">
+
+📍
+
+</div>
+
+<div class="live-title">
+
+LIVE LOCATION
+
+</div>
+
+<div
+id="liveLocation"
+class="live-value">
+
+Waiting...
+
+</div>
+
+</div>
+
+<div class="sos-wrap">
+
+<button
+class="sos-btn"
+onclick="sendSOS()">
+
+SOS
+
+</button>
+
+</div>
+
+<div class="stats">
+
+<div class="stat-card">
+
+<div
+id="contactCount"
+class="stat-number">
+
+0
+
+</div>
+
+<div class="stat-text">
+
+Emergency Contacts
+
+</div>
+
+</div>
+
+<div class="stat-card">
+
+<div
+id="alertCount"
+class="stat-number">
+
+0
+
+</div>
+
+<div class="stat-text">
+
+Past Alerts
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+<!-- CONTACTS -->
+
+<section
+id="contacts"
+class="page">
+
+<div class="title">
+
+Emergency Contacts
+
+</div>
+
+<div class="card">
+
+<input
+id="name"
+type="text"
+placeholder="Contact Name">
+
+<input
+id="phone"
+type="tel"
+placeholder="Phone Number">
+
+<button
+class="primary-btn"
+onclick="saveContact()">
+
+Save Contact
+
+</button>
+
+</div>
+
+<div
+id="contactList">
+
+</div>
+
+</section>
+
+<!-- SAFETY -->
+
+<section
+id="safety"
+class="page">
+
+<div class="title">
+
+Emergency Calls
+
+</div>
+
+<div class="sub">
+
+Quick emergency access
+
+</div>
+
+<div class="card">
+
+<button
+class="primary-btn"
+onclick="callNumber('100')">
+
+👮 Police — 100
+
+</button>
+
+<button
+class="primary-btn"
+onclick="callNumber('1098')">
+
+🧒 Child Helpline — 1098
+
+</button>
+
+<button
+class="primary-btn"
+onclick="callNumber('1091')">
+
+👩 Women Safety — 1091
+
+</button>
+
+<button
+class="primary-btn"
+onclick="callNumber('112')">
+
+🚨 National Emergency — 112
+
+</button>
+
+<button
+class="primary-btn"
+onclick="callNumber('108')">
+
+🚑 Ambulance — 108
+
+</button>
+
+<button
+class="primary-btn"
+onclick="callNumber('101')">
+
+🔥 Fire Brigade — 101
+
+</button>
+
+</div>
+
+<h3
+style="margin-top:18px">
+
+Saved Contacts
+
+</h3>
+
+<div
+id="safetyContacts">
+
+</div>
+
+</section>
+
+<!-- HISTORY -->
+
+<section
+id="history"
+class="page">
+
+<div class="title">
+
+SOS History
+
+</div>
+
+<div class="sub">
+
+Emergency records
+
+</div>
+
+<div
+id="historyList">
+
+</div>
+
+</section>
+
+<!-- PROFILE -->
+
+<section
+id="profile"
+class="page">
+
+<div class="title">
+
+Profile
+
+</div>
+
+<div class="sub">
+
+Your details for SOS sharing
+
+</div>
+
+<div
+class="profile-box">
+
+<div
+class="profile-title">
+
+Your Details
+
+</div>
+
+<div
+class="profile-sub">
+
+These details may be included in SOS alerts
+
+</div>
+
+<input
+id="profileName"
+placeholder="Full Name">
+
+<input
+id="profilePhone"
+type="tel"
+placeholder="Phone Number">
+
+<input
+id="profileEmail"
+type="email"
+placeholder="Email (Optional)">
+
+<button
+class="primary-btn"
+onclick="saveProfile()">
+Save Profile
+</button>
+
+ <button
+class="primary-btn"
+style="background:#d32f2f;margin-top:12px;"
+onclick="logout()">
+
+<i class="fa-solid fa-right-from-bracket"></i>
+Logout
+
+</button>
+
+<div
+id="profileInfo"
+class="profile-info">
+
+No profile saved
+
+</div>
+
+</div>
+
+</section>
+
+<!-- BOTTOM NAV -->
+
+<nav
+class="bottom">
+
+<div
+class="item selected"
+onclick="tab('sos',this)">
+
+<i
+class="fa-solid fa-shield"></i>
+
+<span>SOS</span>
+
+</div>
+
+<div
+class="item"
+onclick="tab('contacts',this)">
+
+<i
+class="fa-solid fa-users"></i>
+
+<span>Contacts</span>
+
+</div>
+
+<div
+class="item"
+onclick="tab('safety',this)">
+
+<i
+class="fa-solid fa-heart"></i>
+
+<span>Safety</span>
+
+</div>
+
+<div
+class="item"
+onclick="tab('history',this)">
+
+<i
+class="fa-solid fa-clock"></i>
+
+<span>History</span>
+
+</div>
+
+<div
+class="item"
+onclick="tab('profile',this)">
+
+<i
+class="fa-solid fa-user"></i>
+
+<span>Profile</span>
+
+</div>
+
+</nav>
+<script type="module" src="firebase.js"></script>
+<script type="module" src="auth.js"></script>
+<script type="module" src="firestore.js"></script>
+<script type="module" src="app.js"></script>
+</div>
+</body>
+</html>
